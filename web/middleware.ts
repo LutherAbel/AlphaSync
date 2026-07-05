@@ -25,10 +25,24 @@ export async function middleware(request: NextRequest) {
     },
   )
 
-  await supabase.auth.getUser()
+  try {
+    // Refresh the session, but never let a slow or unreachable auth backend
+    // block the page (2026-07-05: paused Supabase project made every
+    // cookie-carrying request 504 via MIDDLEWARE_INVOCATION_TIMEOUT).
+    await Promise.race([
+      supabase.auth.getUser(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('auth refresh timeout')), 5000),
+      ),
+    ])
+  } catch {
+    // Fail open: serve the page unauthenticated.
+  }
   return response
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
+  // Only routes that actually use the session. The research-note homepage is
+  // static and must not depend on Supabase availability.
+  matcher: ['/your-own-plan/:path*', '/auth/:path*'],
 }

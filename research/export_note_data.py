@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from build_factor import build_sleeve, bsc_weights, capm, load_prices, month_end_prices
+from vw_test import build_both, load_shares
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(ROOT, "data")
@@ -132,6 +133,12 @@ for m_str, tickers in universe.items():
 ewndx_m = pd.Series(monthly_ew).sort_index()
 common = sleeve_m.index.intersection(ewndx_m.index)
 sel = sleeve_m[common] - ewndx_m[common]
+# value-weighted cross-validation (FactorSpec trial #6)
+_, vw_m, _fallback = build_both(stock_px, universe, load_shares())
+vw_common = vw_m.index.intersection(common)
+vw_excess = vw_m[vw_common] - etf_m["QQQ"][vw_common]
+ew_excess = sleeve_m[vw_common] - etf_m["QQQ"][vw_common]
+
 note["table4_decomposition"] = {
     "qqq": stats(etf_m["QQQ"][common]),
     "ewNdx": stats(ewndx_m[common]),
@@ -139,6 +146,12 @@ note["table4_decomposition"] = {
     "selectionAnn": round(float(sel.mean() * 12) * 100, 2),
     "selectionSharpe": round(float(sel.mean() * 12 / (sel.std(ddof=1) * np.sqrt(12))), 2),
     "selectionT": round(float(sel.mean() / (sel.std(ddof=1) / np.sqrt(len(sel)))), 2),
+    "vwSleeve": stats(vw_m[vw_common]),
+    "vwExcessAnn": round(float(vw_excess.mean() * 12) * 100, 2),
+    "vwExcessT": round(float(vw_excess.mean() / (vw_excess.std(ddof=1) / np.sqrt(len(vw_excess)))), 2),
+    "ewExcessAnn": round(float(ew_excess.mean() * 12) * 100, 2),
+    "ewExcessT": round(float(ew_excess.mean() / (ew_excess.std(ddof=1) / np.sqrt(len(ew_excess)))), 2),
+    "capFallbackPct": round(100.0 * len(_fallback) / (len(vw_m) * 20), 1),
 }
 
 # crisis: 10 worst SPY months
@@ -179,6 +192,7 @@ note["changelog"] = [
     {"n": 3, "trial": "uncapped_leverage", "decision": "cap_kept"},
     {"n": 4, "trial": "dm_bear_gate", "decision": "dropped"},
     {"n": 5, "trial": "residual_momentum", "decision": "dropped_this_universe"},
+    {"n": 6, "trial": "value_weighted", "decision": "narrative_amended"},
 ]
 
 # coverage disclosure

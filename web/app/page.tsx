@@ -83,6 +83,12 @@ export default function ResearchNote() {
       decision: <L en="dropped (this universe)" zh="剔除(本股池)" />,
       cls: 'neg',
     },
+    value_weighted: {
+      trial: <L en="Cap-weighted top-20 (SEC shares)" zh="市值加權 top-20(SEC 股數)" />,
+      result: <L en="excess over QQQ goes to zero" zh="對 QQQ 超額歸零" />,
+      decision: <L en="EW kept; Table 4 recaptioned" zh="維持等權;Table 4 改註" />,
+      cls: 'neg',
+    },
   }
 
   return (
@@ -289,11 +295,16 @@ export default function ResearchNote() {
       <p className="en">
         Zero alpha over the index is not the same as zero contribution. Decomposing the sleeve shows
         where the work actually happens: equal-weighting a mega-cap index costs return, and momentum
-        selection earns it back.
+        selection earns it back. But we also cross-validated the weighting itself (trial #6): a
+        cap-weighted variant of the same top-20 shows <i>no</i> excess over QQQ. The selection effect
+        below is therefore a property of the equal-weight implementation, a momentum-plus-size-tilt
+        composite, not momentum alone.
       </p>
       <p className="zh">
         對指數的 alpha 為零,不等於貢獻為零。把 sleeve
-        拆解,可以看到力氣實際上花在哪:等權一個大市值指數會損失報酬,而動能選股把它賺回來。
+        拆解,可以看到力氣實際上花在哪:等權一個大市值指數會損失報酬,而動能選股把它賺回來。但我們也對加權方式本身做了交叉驗證(試驗
+        #6):同一組 top-20 改成市值加權後,對 QQQ <i>沒有</i>任何超額。因此下表的選股效果是等權實作的性質,是「動能 + size
+        傾斜」的複合,不是動能單獨的功勞。
       </p>
 
       <div className="tbl">
@@ -301,8 +312,8 @@ export default function ResearchNote() {
           <caption>
             <b>Table 4.</b>{' '}
             <L
-              en={<>Decomposition, gross, common window. The selection effect is economically real ({pct(t4.selectionAnn, true)}/yr) but statistically insignificant (<i>t</i> {num(t4.selectionT)}) at this sample length.</>}
-              zh={<>拆解,毛報酬,共同窗口。選股效果在經濟上是實的({pct(t4.selectionAnn, true)}/年),但在此樣本長度下統計不顯著(<i>t</i> {num(t4.selectionT)})。</>}
+              en={<>Decomposition, gross, common window. The equal-weight selection effect ({pct(t4.selectionAnn, true)}/yr, <i>t</i> {num(t4.selectionT)}) does not survive cap-weighting: the value-weighted variant&apos;s excess over QQQ is {pct(t4.vwExcessAnn, true)}/yr (<i>t</i> {num(t4.vwExcessT)}). Neither is statistically significant at this sample length.</>}
+              zh={<>拆解,毛報酬,共同窗口。等權選股效果({pct(t4.selectionAnn, true)}/年,<i>t</i> {num(t4.selectionT)})未能在市值加權下存活:市值加權版對 QQQ 的超額為 {pct(t4.vwExcessAnn, true)}/年(<i>t</i> {num(t4.vwExcessT)})。在此樣本長度下兩者統計上皆不顯著。</>}
             />
           </caption>
           <thead>
@@ -324,14 +335,24 @@ export default function ResearchNote() {
               <td>{num(t4.ewNdx.sharpe)}</td>
             </tr>
             <tr>
-              <td><L en="Momentum top-20 (sleeve)" zh="動能 top-20(sleeve)" /></td>
+              <td><L en="Momentum top-20, equal-weight (sleeve)" zh="動能 top-20,等權(sleeve)" /></td>
               <td>{pct(t4.sleeve.ann)}</td>
               <td>{num(t4.sleeve.sharpe)}</td>
             </tr>
+            <tr>
+              <td><L en="Momentum top-20, cap-weight (trial #6)" zh="動能 top-20,市值加權(試驗 #6)" /></td>
+              <td>{pct(t4.vwSleeve.ann)}</td>
+              <td>{num(t4.vwSleeve.sharpe)}</td>
+            </tr>
             <tr className="rule-top">
-              <td><L en="→ selection effect" zh="→ 選股效果" /></td>
+              <td><L en="→ selection effect, equal-weight space" zh="→ 選股效果(等權空間)" /></td>
               <td className="win">{pct(t4.selectionAnn, true)}</td>
               <td>{num(t4.selectionSharpe)}</td>
+            </tr>
+            <tr>
+              <td><L en="→ excess over QQQ, cap-weight space" zh="→ 對 QQQ 超額(市值加權空間)" /></td>
+              <td className="neg">{pct(t4.vwExcessAnn, true)}</td>
+              <td>—</td>
             </tr>
           </tbody>
         </table>

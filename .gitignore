@@ -1,0 +1,16 @@
+# --- Caches (可重生,不該進版控) ---
+cache/
+**/price_cache/
+**/yf_tz_cache/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# --- OS / 編輯器 ---
+.DS_Store
+Thumbs.db
+
+research/cache/
+**/.next-build/

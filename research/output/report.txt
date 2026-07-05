@@ -1,0 +1,35 @@
+==============================================================================
+GATE 1: spot checks
+  NVDA in top-20, 2023-2024: 83% of months (expect high)
+  TSLA in top-20, 2020H2:    100% of months (expect high)
+GATE 2: correlation structure
+  corr(sleeve, QQQ) = 0.85
+  corr(sleeve, SPY) = 0.77
+  corr(sleeve, MTUM) = 0.89
+  beta vs QQQ = 1.03 (expect ~1)
+GATE 3: turnover
+  monthly one-way turnover: mean 25%, median 25% (literature momentum: high)
+==============================================================================
+PERFORMANCE 2015-01 .. 2026-07 (gross)
+  SPY                              ann  14.14%  vol 14.49%  SR  0.98  t  3.48  skew -0.35  worst_m  -12.5%  maxDD  -23.9%
+  QQQ                              ann  19.44%  vol 17.99%  SR  1.08  t  3.86  skew -0.12  worst_m  -13.6%  maxDD  -32.6%
+  MTUM                             ann  16.06%  vol 16.56%  SR  0.97  t  3.46  skew  0.05  worst_m  -12.7%  maxDD  -30.2%
+  momentum sleeve (plain)          ann  20.54%  vol 22.54%  SR  0.91  t  3.10  skew  0.33  worst_m  -15.2%  maxDD  -31.0%
+  sleeve + BSC(20%, cap 1)         ann  14.46%  vol 17.51%  SR  0.83  t  2.74  skew  0.06  worst_m  -14.5%  maxDD  -23.6%
+  sleeve + BSC(16%, cap 1)         ann  12.17%  vol 14.69%  SR  0.83  t  2.75  skew  0.04  worst_m  -11.6%  maxDD  -19.1%
+  sleeve + BSC(24%, cap 1)         ann  16.40%  vol 19.47%  SR  0.84  t  2.79  skew  0.18  worst_m  -15.2%  maxDD  -26.1%
+  BSC weight: median 0.87, months at cap 34%
+
+VALUE COMBOS (managed momentum + unmanaged VTV, monthly rebalance)
+  75/25 mom/value                  ann  13.93%  vol 15.62%  SR  0.89  t  2.96  skew -0.04  worst_m  -11.1%  maxDD  -21.2%
+  50/50 mom/value                  ann  13.40%  vol 14.39%  SR  0.93  t  3.09  skew -0.21  worst_m  -11.4%  maxDD  -18.9%
+
+ALPHA REGRESSIONS (monthly)
+  sleeve plain     vs QQQ: alpha   0.72%/yr (t  0.20), beta 1.03
+  sleeve plain     vs SPY: alpha   4.31%/yr (t  0.99), beta 1.16
+  sleeve managed   vs QQQ: alpha  -0.54%/yr (t -0.18), beta 0.77
+  sleeve managed   vs SPY: alpha   1.81%/yr (t  0.51), beta 0.88
+
+NET OF COSTS (10 bps per side x turnover)
+  momentum sleeve (net)            ann  19.95%  vol 22.55%  SR  0.88  t  3.01  skew  0.33  worst_m  -15.3%  maxDD  -31.5%
+  sleeve + BSC (net)               ann  13.98%  vol 17.51%  SR  0.80  t  2.65  skew  0.06  worst_m  -14.5%  maxDD  -24.0%

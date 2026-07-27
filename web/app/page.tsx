@@ -128,9 +128,6 @@ export default function ResearchNote() {
           &amp; Santa-Clara 2015)。本策略不宣稱任何自有 alpha。溢酬的證據來自文獻,99 年的美國資料與跨 24
           個市場的複製,不是這份回測。本頁面加上的是一份誠實的實作紀錄:在稀釋成 long-only、無槓桿、散戶可執行的組合後還剩下什麼,以及每一層我們測過又捨棄的東西,都在你投資前先寫清楚。
         </p>
-        <span className="stamp">
-          <L en="No alpha claimed · exposures only" zh="不宣稱 alpha · 只有曝險" />
-        </span>
       </section>
 
       <h2 className="sec">
@@ -516,9 +513,6 @@ export default function ResearchNote() {
           en="© 2026 AlphaSync · Not investment advice. Backtested results do not guarantee future performance."
           zh="© 2026 AlphaSync · 非投資建議。回測結果不保證未來績效。"
         />
-        <span>
-          <a href="/your-own-plan"><L en="Personal plan →" zh="個人計畫 →" /></a>
-        </span>
       </footer>
     </NoteShell>
   )

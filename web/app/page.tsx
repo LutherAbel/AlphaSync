@@ -8,7 +8,7 @@ import './note.css'
 export const metadata: Metadata = {
   title: 'AlphaSync : Research Notes',
   description:
-    'A literature-based momentum implementation with volatility-managed risk control. No alpha claimed; exposures, risk control, and honest accounting only.',
+    'A literature-based momentum implementation with volatility-managed risk control, documented as a public research note.',
 }
 
 /** Bilingual inline pair; CSS shows one side based on the shell's data-lang. */

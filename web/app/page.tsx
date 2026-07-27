@@ -508,12 +508,6 @@ export default function ResearchNote() {
         </p>
       </div>
 
-      <footer className="note-footer">
-        <L
-          en="© 2026 AlphaSync · Not investment advice. Backtested results do not guarantee future performance."
-          zh="© 2026 AlphaSync · 非投資建議。回測結果不保證未來績效。"
-        />
-      </footer>
     </NoteShell>
   )
 }

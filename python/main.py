@@ -251,10 +251,7 @@ class Config:
     # --- Market data provider ---
     data_provider_primary: str = "tiingo"
     data_provider_fallback: str = "yahoo"
-    tiingo_api_key: str = os.environ.get(
-        "TIINGO_API_KEY",
-        "fe6cabd6bb25948182f6fa264ad4fd1c0a3217e3",
-    )
+    tiingo_api_key: str = os.environ.get("TIINGO_API_KEY", "")
     tiingo_timeout_sec: int = 20
 
 

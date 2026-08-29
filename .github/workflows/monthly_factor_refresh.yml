@@ -1,0 +1,48 @@
+name: Monthly Factor Refresh
+
+# First calendar day each month, 22:30 UTC (after US close). Formation uses
+# the prior month-end, so the exact weekday does not matter.
+# The pushed commit also resets GitHub's 60-day scheduled-workflow timer.
+on:
+  schedule:
+    - cron: '30 22 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Refresh prices (current members + ETFs)
+        env:
+          TIINGO_API_KEY: ${{ secrets.TIINGO_API_KEY }}
+        run: python research/fetch_data.py --refresh
+
+      - name: Build factor sleeve
+        run: python research/build_factor.py
+
+      - name: Export research-note data
+        run: python research/export_note_data.py
+
+      - name: Commit and push
+        run: |
+          git add research/cache research/data research/output web/data
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(pipeline): monthly factor refresh"
+            git push
+          fi

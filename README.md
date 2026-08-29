@@ -21,8 +21,8 @@ It owns:
 
 ## Automation (GitHub Actions)
 
-- `weekly_web_data_refresh.yml` - Fri 22:30 UTC -> `scripts/generate_data.py` -> commit `web/data`.
-- `daily_exit_monitor.yml` - Mon-Fri 21:30 UTC -> `python/monitor/daily_exit_monitor.py`.
+- `monthly_factor_refresh.yml` - 1st of month 22:30 UTC -> refresh prices (`research/fetch_data.py --refresh`) -> `research/build_factor.py` -> `research/export_note_data.py` -> commit `web/data/factor_note.json` (+ cache/output) -> Vercel auto-deploys.
+- The v6-era workflows (weekly web data refresh, daily exit monitor) are retired; the monitor code stays archived in `python/monitor/`.
 
 ## Common Commands
 

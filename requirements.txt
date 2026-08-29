@@ -2,4 +2,4 @@ yfinance>=0.2.36
 pandas>=2.0.0
 numpy>=1.26
 requests>=2.31.0
-nasdaq-100-ticker-history
+nasdaq-100-ticker-history @ git+https://github.com/jmccarrell/n100tickers@9a23023b59707c5372ae1fff4ed983b3ad025c74

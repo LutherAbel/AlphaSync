@@ -24,10 +24,37 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # research/cache is licensed Tiingo data: kept OUT of git (public repo),
+      # persisted between runs via actions/cache. On a cold cache the fetch
+      # downloads everything; the guard below stops the build if rate limits
+      # left the download incomplete (re-run later to resume).
+      - name: Restore price cache
+        uses: actions/cache/restore@v4
+        with:
+          path: research/cache
+          key: tiingo-cache-${{ github.run_id }}
+          restore-keys: tiingo-cache-
+
       - name: Refresh prices (current members + ETFs)
         env:
           TIINGO_API_KEY: ${{ secrets.TIINGO_API_KEY }}
         run: python research/fetch_data.py --refresh
+
+      - name: Save price cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: research/cache
+          key: tiingo-cache-${{ github.run_id }}
+
+      - name: Guard incomplete data
+        run: |
+          n=$(ls research/cache | wc -l)
+          echo "cache files: $n"
+          if [ "$n" -lt 200 ]; then echo "cache incomplete (<200 tickers)"; exit 1; fi
+          if grep -q "429" research/data/coverage_gaps.txt; then
+            echo "rate-limited fetch; resume on next run"; exit 1
+          fi
 
       - name: Build factor sleeve
         run: python research/build_factor.py
@@ -40,7 +67,7 @@ jobs:
 
       - name: Commit and push
         run: |
-          git add research/cache research/data research/output web/data site
+          git add research/data research/output web/data site
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else

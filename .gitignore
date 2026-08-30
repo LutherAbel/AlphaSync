@@ -1,6 +1,8 @@
 # --- Caches (可重生,不該進版控) ---
-# root v6 cache only; research/cache IS tracked (CI needs it for monthly refresh)
 /cache/
+# Tiingo licensed data: never commit (public repo = redistribution).
+# CI persists it via actions/cache; purged from git history 2026-09.
+research/cache/
 **/price_cache/
 **/yf_tz_cache/
 

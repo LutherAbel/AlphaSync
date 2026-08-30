@@ -35,9 +35,12 @@ jobs:
       - name: Export research-note data
         run: python research/export_note_data.py
 
+      - name: Rebuild static site
+        run: python research/build_site.py
+
       - name: Commit and push
         run: |
-          git add research/cache research/data research/output web/data
+          git add research/cache research/data research/output web/data site
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
